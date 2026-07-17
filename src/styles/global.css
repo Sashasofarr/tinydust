@@ -40,6 +40,10 @@ body {
 	line-height: 1.7;
 }
 
+.poem {
+	white-space: pre-line;
+}
+
 .footnote {
 	font-size: 0.8em;
 	color: var(--text-muted);

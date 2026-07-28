@@ -1,4 +1,3 @@
-
 ---
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -8,6 +7,13 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const monthFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  year: 'numeric',
+});
+
+let lastMonthKey = '';
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -15,16 +21,29 @@ const posts = (await getCollection('blog')).sort(
     <section>
       <ul>
         {
-          posts.map((post) => (
-            <li>
-              <a href={`/blog/${post.id}/`}>
-                <span class="date">
-                  <FormattedDate date={post.data.pubDate} />
-                </span>
-                <span class="title">{post.data.title}</span>
-              </a>
-            </li>
-          ))
+          posts.map((post) => {
+            const monthKey = monthFormatter.format(post.data.pubDate);
+            const isNewMonth = monthKey !== lastMonthKey;
+            lastMonthKey = monthKey;
+
+            return (
+              <>
+                {isNewMonth && (
+                  <li class="month-marker" aria-hidden="false">
+                    <span class="month-label">{monthKey}</span>
+                  </li>
+                )}
+                <li>
+                  <a href={`/blog/${post.id}/`}>
+                    <span class="date">
+                      <FormattedDate date={post.data.pubDate} />
+                    </span>
+                    <span class="title">{post.data.title}</span>
+                  </a>
+                </li>
+              </>
+            );
+          })
         }
       </ul>
     </section>
@@ -32,7 +51,6 @@ const posts = (await getCollection('blog')).sort(
 </BaseLayout>
 
 <style>
-
   ul {
     list-style: none;
     margin: 0;
@@ -63,7 +81,18 @@ const posts = (await getCollection('blog')).sort(
     text-decoration: underline;
   }
 
-
-
-
+  .month-marker {
+    padding: 1.5rem 0 0.4rem;
+    border-bottom: none;
+  }
+  .month-marker:first-child {
+    padding-top: 0;
+  }
+  .month-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
 </style>

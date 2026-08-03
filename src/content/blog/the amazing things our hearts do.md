@@ -15,4 +15,4 @@ When depolarization happens, it reaches T-tubule and triggers voltage-gated Ca2+
 
 *All this is how a heart muscle contracts.*
 
-Isn't this  amazing?? Makes me want to go out and run a 5K - just do my part to keep the heart healthy.
+Isn't this  amazing?? Makes me want to go out and run a 5K - just doing my part to keep the heart healthy.
